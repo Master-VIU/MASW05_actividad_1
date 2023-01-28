@@ -42,7 +42,7 @@ let temporizador = null; // manejador del temporizador
 
 /***** FIN DECLARACIÓN DE VARIABLES GLOBALES *****/
 
- 
+
 // Rutina asociada a boton reset
 /*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 
@@ -100,7 +100,7 @@ function comenzarJuego() {
 */
 
 function arrancarTiempo(){
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
 	if (temporizador) clearInterval(temporizador);
     let hms = function (){
 			let seg = Math.trunc( segundos % 60 );
@@ -112,6 +112,7 @@ function arrancarTiempo(){
 			setContador(contTiempo, tiempo);
             segundos++;
 		}
+		
 	segundos = 0;
     hms(); // Primera visualización 00:00:00
 	temporizador = setInterval(hms, 1000);
@@ -148,7 +149,8 @@ function cargarTapeteInicial(mazo) {
    	del elemento que actúa de contador
 */
 function incContador(contador){
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+	contador++;
+	console.log(contador);
 } // incContador
 
 /**
@@ -156,6 +158,8 @@ function incContador(contador){
 */
 function decContador(contador){
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! ***/	
+	contador--;
+	console.log('Contador = ' + contador);
 } // decContador
 
 /**
@@ -164,4 +168,7 @@ function decContador(contador){
 */
 function setContador(contador, valor) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	contTiempo.innerHTML = valor;
+
 } // setContador
+
