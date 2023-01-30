@@ -2,10 +2,11 @@
 
 // Array de palos
 let palos = ["viu", "cua", "hex", "cir"];
+//let palos = ["viu"];
 // Array de número de cartas
-//let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 // En las pruebas iniciales solo se trabajará con cuatro cartas por palo:
-let numeros = [9, 10, 11, 12];
+//let numeros = [9, 10, 11, 12];
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
 let paso = 5;
@@ -34,6 +35,7 @@ let contReceptor2   = document.getElementById("contador_receptor2");
 let contReceptor3   = document.getElementById("contador_receptor3");
 let contReceptor4   = document.getElementById("contador_receptor4");
 let contMovimientos = document.getElementById("contador_movimientos");
+let botonReset		= document.getElementById("reset");
 
 // Tiempo
 let contTiempo  = document.getElementById("contador_tiempo"); // span cuenta tiempo
@@ -60,18 +62,42 @@ function comenzarJuego() {
 	el elemento img, inclúyase como elemento del array mazoInicial. 
 	*/
 
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
-    
-	
+	botonReset.disabled = true;
+
+	mazoInicial = []
+	mazoSobrantes = []
+	mazoReceptor1 = []
+	mazoReceptor2 = []
+	mazoReceptor3 = []
+	mazoReceptor4 = []
+
+	// CREAMOS BARAJA DE CARTAS CON LOS PALOS Y NUMEROS SELECCIONADOS -> MAZO INICIAL
+	for (let iteradorPalo = 0; iteradorPalo < palos.length; iteradorPalo++) {
+		for (let iteradorNumero = 0; iteradorNumero < numeros.length; iteradorNumero++) {
+			let temporalImage = document.createElement("img");
+			temporalImage.src = "./imagenes/baraja/" + numeros[iteradorNumero] + "-" + palos[iteradorPalo] + ".png";
+			temporalImage.width = 75;
+			temporalImage.height = 100;
+			mazoInicial.push(temporalImage)
+		}
+	}
+
 	// Barajar y dejar mazoInicial en tapete inicial
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	mazoInicial = barajar(mazoInicial);
+	vaciarTapete(tapeteInicial);
+	cargarTapeteInicial(mazoInicial);
 
 	// Puesta a cero de contadores de mazos
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	contInicial.innerHTML = "0";
+	contSobrantes.innerHTML = "0";
+	contReceptor1.innerHTML = "0";
+	contReceptor2.innerHTML = "0";
+	contReceptor3.innerHTML = "0";
+	contReceptor4.innerHTML = "0";
+	contMovimientos.innerHTML = "0";
 	
 	// Arrancar el conteo de tiempo
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
-
+	arrancarTiempo();
 } // comenzarJuego
 
 
@@ -99,8 +125,11 @@ function comenzarJuego() {
 	a clearInterval en su caso.   
 */
 
+function isResetDisabled() {
+	return this.inProgress;
+}
+
 function arrancarTiempo(){
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
 	if (temporizador) clearInterval(temporizador);
     let hms = function (){
 			let seg = Math.trunc( segundos % 60 );
@@ -116,7 +145,6 @@ function arrancarTiempo(){
 	segundos = 0;
     hms(); // Primera visualización 00:00:00
 	temporizador = setInterval(hms, 1000);
-    	
 } // arrancarTiempo
 
 
@@ -127,7 +155,8 @@ function arrancarTiempo(){
 	dentro de la rutina, esto aparecerá reflejado fuera de la misma.
 */
 function barajar(mazo) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+	return mazo;
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 } // barajar
 
 
@@ -140,9 +169,30 @@ function barajar(mazo) {
 	Al final se debe ajustar el contador de cartas a la cantidad oportuna
 */
 function cargarTapeteInicial(mazo) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
-} // cargarTapeteInicial
+	inProgress = true;
+	for (let carta = 0; carta < mazo.length; carta++) {
+		// Le damos un timeout para dar el efecto de que se van colocando poco a poco y no de golpe
+		setTimeout(cargarCarta, 50*carta, mazo[carta], carta, mazo.length);
+	}
+}
 
+function cargarCarta(carta, indice, total) {
+	carta.style.position = "absolute";
+	carta.style.top = ""+(5 * indice)+"px";
+	carta.style.left = ""+(5 * indice)+"px";
+	carta.draggable = "true";
+
+	tapeteInicial.appendChild(carta);
+	if (indice === total - 1) {
+		botonReset.disabled = false;
+	}
+}
+
+function vaciarTapete(tapete) {
+	while(tapete.firstChild && !tapete.lastChild.id.includes('contador')) {
+		tapete.removeChild(tapete.lastChild);
+	}
+}
 
 /**
  	Esta función debe incrementar el número correspondiente al contenido textual
