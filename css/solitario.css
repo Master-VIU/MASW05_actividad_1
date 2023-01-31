@@ -16,9 +16,9 @@
 }
 
 #reset {
-	position: absolute;
-	bottom: 200px;
+	position: relative;	
 	left: 48%;
+	
 }
 /* Centrado del título y color */
 h1#titulo {
