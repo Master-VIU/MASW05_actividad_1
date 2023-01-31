@@ -4,9 +4,9 @@
 let palos = ["viu", "cua", "hex", "cir"];
 //let palos = ["viu"];
 // Array de número de cartas
-let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+//let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 // En las pruebas iniciales solo se trabajará con cuatro cartas por palo:
-//let numeros = [9, 10, 11, 12];
+let numeros = [9, 10, 11, 12];
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
 let paso = 5;
@@ -82,11 +82,6 @@ function comenzarJuego() {
 		}
 	}
 
-	// Barajar y dejar mazoInicial en tapete inicial
-	mazoInicial = barajar(mazoInicial);
-	vaciarTapete(tapeteInicial);
-	cargarTapeteInicial(mazoInicial);
-
 	// Puesta a cero de contadores de mazos
 	contInicial.innerHTML = "0";
 	contSobrantes.innerHTML = "0";
@@ -95,6 +90,14 @@ function comenzarJuego() {
 	contReceptor3.innerHTML = "0";
 	contReceptor4.innerHTML = "0";
 	contMovimientos.innerHTML = "0";
+
+	
+	// Barajar y dejar mazoInicial en tapete inicial
+	mazoInicial = barajar(mazoInicial);
+	vaciarTapete(tapeteInicial);
+	cargarTapeteInicial(mazoInicial);
+
+	
 	
 	// Arrancar el conteo de tiempo
 	arrancarTiempo();
@@ -155,10 +158,12 @@ function arrancarTiempo(){
 	dentro de la rutina, esto aparecerá reflejado fuera de la misma.
 */
 function barajar(mazo) {
-	return mazo;
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	mazo = mazo.sort(() => Math.random()-0.5);
+	let ini = mazo.length;	
+	contInicial.innerHTML = ini;
+	
+	return mazo;	
 } // barajar
-
 
 
 /**
@@ -200,7 +205,7 @@ function vaciarTapete(tapete) {
 */
 function incContador(contador){
 	contador++;
-	console.log(contador);
+	return contador;
 } // incContador
 
 /**
@@ -209,7 +214,7 @@ function incContador(contador){
 function decContador(contador){
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! ***/	
 	contador--;
-	console.log('Contador = ' + contador);
+	return contador;
 } // decContador
 
 /**
