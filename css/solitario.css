@@ -15,7 +15,11 @@
 	right: 3px;
 }
 
-
+#reset {
+	position: absolute;
+	bottom: -120px;
+	left: 630px;
+}
 /* Centrado del título y color */
 h1#titulo {
 	text-align: center;
