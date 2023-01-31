@@ -159,8 +159,8 @@ function arrancarTiempo(){
 */
 function barajar(mazo) {
 	mazo = mazo.sort(() => Math.random()-0.5);
-	let ini = mazo.length;
-	contInicial.innerHTML = ini;	
+	let contadorMazoInicial = mazo.length;
+	contInicial.innerHTML = contadorMazoInicial;	
 	return mazo;	
 } // barajar
 
