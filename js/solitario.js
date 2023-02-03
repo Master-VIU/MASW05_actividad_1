@@ -1,4 +1,8 @@
 let palos = ["viu", "cua", "hex", "cir"];
+let colores = {
+	gris: ['cir', 'hex'],
+	naranja: ['viu', 'cua']
+}
 let numeros = [9, 10, 11, 12];
 let paso = 5;
 
@@ -77,32 +81,6 @@ function comenzarJuego() {
 
 	configurarTapetes();
 
-	/*
-	// Permitir a los tapetes recibir cartas
-	tapeteSobrantes
-	tapeteReceptor1
-	tapeteReceptor2
-	tapeteReceptor3
-	tapeteReceptor4
-	
-	target.addEventListener("dragover", (event) => {
-		event.preventDefault();
-	});
-
-	target.addEventListener("drop", (event) => {
-		// prevent default action (open as link for some elements)
-		event.preventDefault();
-		// move dragged element to the selected drop target
-		if (event.target.className === "dropzone") {
-			dragged.parentNode.removeChild(dragged);
-			event.target.appendChild(dragged);
-		}
-	});
-
-	//TODO: Cuando una carta sea depositada en uno de los otros tapetes, cambiamos la propiedad draggable
-	de la ultima carta que este en el monton mazoInicial
-	*/
-
 	// Barajar y dejar mazoInicial en tapete inicial
 	const tapeteInicial = getTapeteObject('inicial')
 	tapeteInicial.mazo = barajar(tapeteInicial.mazo);
@@ -172,7 +150,8 @@ function movimientoValido(carta, tapeteDestino) {
 	if (tapeteDestino.mazo.length === 0) {
 		return carta.dataset['numero'] == "12";
 	} else {
-		return false
+		let cartaDestino = tapeteDestino.mazo[tapeteDestino.length-1]
+		// Comprobar con los datos de la carta destino si es compatible en color y en numero
 	}
 }
 
