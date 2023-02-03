@@ -2,38 +2,44 @@ let palos = ["viu", "cua", "hex", "cir"];
 let numeros = [9, 10, 11, 12];
 let paso = 5;
 
-const tapetesMazos = {
-	inicial: {
+const tapetesMazos = [
+	{
+		id: "inicial",
 		tapete: document.getElementById("inicial"),
 		mazo: [],
 		contador: document.getElementById("contador_inicial")
 	},
-	sobrantes: {
+	{
+		id: "sobrantes",
 		tapete: document.getElementById("sobrantes"),
 		mazo: [],
 		contador: document.getElementById("contador_sobrantes")
 	},
-	receptor1: {
+	{
+		id: "receptor1",
 		tapete: document.getElementById("receptor1"),
 		mazo: [],
 		contador: document.getElementById("contador_receptor1")
 	},
-	receptor2: {
+	{
+		id: "receptor2",
 		tapete: document.getElementById("receptor2"),
 		mazo: [],
 		contador: document.getElementById("contador_receptor2")
 	},
-	receptor3: {
+	{
+		id: "receptor3",
 		tapete: document.getElementById("receptor3"),
 		mazo: [],
 		contador: document.getElementById("contador_receptor3")
 	},
-	receptor4: {
+	{
+		id: "receptor4",
 		tapete: document.getElementById("receptor4"),
 		mazo: [],
 		contador: document.getElementById("contador_receptor4")
 	}
-}
+]
 
 let contMovimientos = document.getElementById("contador_movimientos");
 let botonReset		= document.getElementById("reset");
@@ -57,16 +63,16 @@ function comenzarJuego() {
 			temporalImage.setAttribute("data-palo", palos[iteradorPalo]);
 			temporalImage.setAttribute("data-numero", numeros[iteradorNumero]);
 			temporalImage.setAttribute("data-tapete", "inicial");
-			tapetesMazos.inicial.mazo.push(temporalImage);
+			getTapeteObject('inicial').mazo.push(temporalImage);
 		}
 	}
 
-	tapetesMazos.inicial.contador.innerHTML = "0";
-	tapetesMazos.receptor1.contador.innerHTML = "0";
-	tapetesMazos.receptor2.contador.innerHTML = "0";
-	tapetesMazos.receptor3.contador.innerHTML = "0";
-	tapetesMazos.receptor4.contador.innerHTML = "0";
-	tapetesMazos.sobrantes.contador.innerHTML = "0";
+	getTapeteObject("inicial").contador.innerHTML = "0";
+	getTapeteObject("receptor1").contador.innerHTML = "0";
+	getTapeteObject("receptor2").contador.innerHTML = "0";
+	getTapeteObject("receptor3").contador.innerHTML = "0";
+	getTapeteObject("receptor4").contador.innerHTML = "0";
+	getTapeteObject("sobrantes").contador.innerHTML = "0";
 	contMovimientos.innerHTML = "0";
 
 	configurarTapetes();
@@ -98,9 +104,10 @@ function comenzarJuego() {
 	*/
 
 	// Barajar y dejar mazoInicial en tapete inicial
-	tapetesMazos.inicial.mazo = barajar(tapetesMazos.inicial.mazo);
-	vaciarTapete(tapetesMazos.inicial.tapete);
-	cargarTapeteInicial(tapetesMazos.inicial.mazo);
+	const tapeteInicial = getTapeteObject('inicial')
+	tapeteInicial.mazo = barajar(tapeteInicial.mazo);
+	vaciarTapete(tapeteInicial.tapete);
+	cargarTapeteInicial(tapeteInicial.mazo);
 	
 	// Arrancar el conteo de tiempo
 	arrancarTiempo();
@@ -108,13 +115,10 @@ function comenzarJuego() {
 
 function configurarTapetes() {
 
-	const tapetesDraggeables = [
-		tapetesMazos.receptor1,
-		tapetesMazos.receptor2,
-		tapetesMazos.receptor3,
-		tapetesMazos.receptor4,
-		tapetesMazos.sobrantes
-	]
+	const tapetesDraggeables = tapetesMazos.filter((tapete) => {
+		const draggeable = ["receptor1", "receptor2", "receptor3", "receptor4"]
+		return draggeable.includes(tapete.id)
+	})
 
 	for (const objetoTapete of tapetesDraggeables) {
 		objetoTapete.tapete.ondragenter = function(e) { e.preventDefault(); };
@@ -122,17 +126,29 @@ function configurarTapetes() {
 		objetoTapete.tapete.ondragleave = function(e) { e.preventDefault(); };
 		objetoTapete.tapete.ondrop = function(event) {
 			event.preventDefault();
-			let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
-			// Soltar el ultimo hijo del tapete al que pertenece la carta, solo si es de tipo Inicial y Sobrantes
-			let tapeteOrigen = document.getElementById(event.dataTransfer.getData("text/plain/tapete"));
-			tapeteOrigen.removeChild(carta);
-			// Apendear la carta como hijo del tapete seleccionado si se permite
-			tapete.appendChild(carta);
-			mazoInicial.pop()
-
+			let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));
+			if (tapeteOrigen.id === 'inicial' || tapeteOrigen.id === 'sobrantes') {
+				let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
+				tapeteOrigen.tapete.removeChild(carta);
+				decContador(tapeteOrigen.contador);
+				tapeteOrigen.mazo.pop();
+				tapeteOrigen.mazo[tapeteOrigen.mazo.length - 1].draggable = true;
+				carta.style.top = "50%";
+				carta.style.left = "50%";
+				carta.style.transform="translate(-50%, -50%)";
+				objetoTapete.tapete.appendChild(carta);
+				incContador(objetoTapete.contador);
+				objetoTapete.mazo.push(carta);
+			} else {
+				console.log("No se pueden mover cartas de los tapetes receptores")
+			}
 			// Eliminar esa carta del array en el que se encuentra, y dejarla en otro
 		};
 	}
+}
+
+function getTapeteObject(idTapete) {
+	return tapetesMazos.find((tapete) => tapete.id === idTapete);
 }
 
 /**
@@ -186,7 +202,7 @@ function arrancarTiempo(){
 */
 function barajar(mazo) {
 	const mazoBarajado = mazo.sort(() => Math.random()-0.5);
-	tapetesMazos.inicial.contador.innerHTML = mazoBarajado.length + "";
+	getTapeteObject('inicial').contador.innerHTML = mazoBarajado.length + "";
 	return mazo;	
 }
 
@@ -215,7 +231,7 @@ function cargarCarta(carta, indice, total) {
 	});
 	carta.addEventListener("drag", () => {});
 	carta.addEventListener("dragend", () => {});
-	tapetesMazos.inicial.tapete.appendChild(carta);
+	getTapeteObject('inicial').tapete.appendChild(carta);
 	if (indice === total - 1) {
 		// Habilitamos el boton de reseteo por si se quiere reiniciar la partida
 		// Se pone la ultima carta del monton con el atributo draggable a true, para que se pueda arrastrar
