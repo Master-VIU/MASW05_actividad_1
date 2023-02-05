@@ -82,11 +82,10 @@ function comenzarJuego() {
 	configurarTapetes();
 
 	// Barajar y dejar mazoInicial en tapete inicial
-	const tapeteInicial = getTapeteObject('inicial')
+	const tapeteInicial = getTapeteObject('inicial');
 	tapeteInicial.mazo = barajar(tapeteInicial.mazo);
 	vaciarTapete(tapeteInicial.tapete);
-	cargarTapeteInicial(tapeteInicial.mazo);
-	
+	cargarTapeteInicial(tapeteInicial.mazo);		
 	// Arrancar el conteo de tiempo
 	arrancarTiempo();
 } // comenzarJuego
@@ -104,7 +103,7 @@ function configurarTapetes() {
 		objetoTapete.tapete.ondragleave = function(e) { e.preventDefault(); };
 		objetoTapete.tapete.ondrop = function(event) {
 			event.preventDefault();
-			let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));
+			let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));		
 			if (tapeteOrigen.id === 'inicial' || tapeteOrigen.id === 'sobrantes') {
 				let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
 				if ( movimientoValido(carta, objetoTapete) ) {
@@ -137,6 +136,10 @@ function moverCartaTapete(carta, origen, destino) {
 	origen.tapete.removeChild(carta);
 	decContador(origen.contador);
 	origen.mazo.pop();
+	const tapeteInicial = getTapeteObject('inicial');
+	if(tapeteInicial.mazo.length == "0"){
+		recargarTapeteInicial(getTapeteObject('sobrantes'));
+	} else {
 	origen.mazo[origen.mazo.length - 1].draggable = true;
 	carta.style.top = "50%";
 	carta.style.left = "50%";
@@ -144,6 +147,7 @@ function moverCartaTapete(carta, origen, destino) {
 	destino.tapete.appendChild(carta);
 	incContador(destino.contador);
 	destino.mazo.push(carta);
+	}
 }
 
 function movimientoValido(carta, tapeteDestino) {
@@ -151,6 +155,17 @@ function movimientoValido(carta, tapeteDestino) {
 		return carta.dataset['numero'] == "12";
 	} else {
 		let cartaDestino = tapeteDestino.mazo[tapeteDestino.length-1]
+		let cartaMover = carta.dataset['numero'];
+		if(cartaMover == "11"){
+			return carta.dataset['numero'] == "11";
+		}if(cartaMover == "10"){
+			return carta.dataset['numero'] == "10";
+		}if(cartaMover == "9"){
+			return carta.dataset['numero'] == "9";
+		}if(cartaMover == "8"){
+			return carta.dataset['numero'] == "8";
+		}
+		
 		// Comprobar con los datos de la carta destino si es compatible en color y en numero
 	}
 }
@@ -221,6 +236,14 @@ function cargarTapeteInicial(mazo) {
 	}
 }
 
+function recargarTapeteInicial(tapeteSobrantes){
+	const tapeteInicial = getTapeteObject('inicial');	
+		cargarTapeteInicial(tapeteSobrantes.mazo);		
+		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
+		console.log(tapeteSobrantes.mazo.length);
+		getTapeteObject("sobrantes").contador.innerHTML = "0";
+}
+
 function cargarCarta(carta, indice, total) {
 	carta.style.position = "absolute";
 	carta.style.top = ""+(5 * indice)+"px";
@@ -256,7 +279,7 @@ function vaciarTapete(tapete) {
 
 
 function incContador(contador){
-	contador.innerHTML = "" + parseInt(contador.innerHTML) + 1;
+	contador.innerHTML = parseInt(contador.innerHTML) + 1;
 	return contador;
 }
 
