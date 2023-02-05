@@ -53,10 +53,47 @@ let segundos 	 = 0;    // cuenta de segundos
 let temporizador = null; // manejador del temporizador
 
 
+// Funcion que devuelve el objeto tapete pasandole solo su id
+function getTapeteObject(idTapete) {
+	return tapetesMazos.find((tapete) => tapete.id === idTapete);
+}
+
 function comenzarJuego() {
 
+	// Inicio del juego
 	botonReset.disabled = true;
+<<<<<<< HEAD
 	
+=======
+	ponerACeroTapetes();
+	contMovimientos.innerHTML = "0";
+
+	// Objetos img y propiedades de tapetes
+	cargarBaraja();
+	configurarTapetes();
+
+	// Barajar y dejar mazoInicial en tapete inicial
+	const tapeteInicial = getTapeteObject('inicial')
+	tapeteInicial.mazo = barajar(tapeteInicial.mazo);
+	vaciarTapete(tapeteInicial.tapete);
+	cargarTapeteInicial(tapeteInicial.mazo);
+	
+	// Arrancar el conteo de tiempo
+	arrancarTiempo();
+}
+
+// Para todos los tapetes, poner el contador a cero y vaciar el mazo
+function ponerACeroTapetes() {
+	const tapetes = ["inicial",	"receptor1",	"receptor2",	"receptor3",	"receptor4",	"sobrantes"]
+	for (const tapete of tapetes) {
+		getTapeteObject(tapete).mazo = [];
+		getTapeteObject(tapete).contador.innerHTML = "0";
+	}
+}
+
+// Funcion que instancia todos los elementos img y los deja en el mazo inicial
+function cargarBaraja() {
+>>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 	for (let iteradorPalo = 0; iteradorPalo < palos.length; iteradorPalo++) {
 		for (let iteradorNumero = 0; iteradorNumero < numeros.length; iteradorNumero++) {
 			let temporalImage = document.createElement("img");
@@ -70,7 +107,9 @@ function comenzarJuego() {
 			getTapeteObject('inicial').mazo.push(temporalImage);
 		}
 	}
+}
 
+<<<<<<< HEAD
 	getTapeteObject("inicial").contador.innerHTML = "0";
 	getTapeteObject("receptor1").contador.innerHTML = "0";
 	getTapeteObject("receptor2").contador.innerHTML = "0";
@@ -90,8 +129,10 @@ function comenzarJuego() {
 	arrancarTiempo();
 } // comenzarJuego
 
+=======
+// Encargada de configurar las propiedades y comportamientos de los tapetes
+>>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 function configurarTapetes() {
-
 	const tapetesDraggeables = tapetesMazos.filter((tapete) => {
 		const draggeable = ["receptor1", "receptor2", "receptor3", "receptor4"]
 		return draggeable.includes(tapete.id)
@@ -101,6 +142,7 @@ function configurarTapetes() {
 		objetoTapete.tapete.ondragenter = function(e) { e.preventDefault(); };
 		objetoTapete.tapete.ondragover = function(e) { e.preventDefault(); };
 		objetoTapete.tapete.ondragleave = function(e) { e.preventDefault(); };
+<<<<<<< HEAD
 		objetoTapete.tapete.ondrop = function(event) {
 			event.preventDefault();
 			let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));		
@@ -114,13 +156,38 @@ function configurarTapetes() {
 				console.log("No se pueden mover cartas de los tapetes receptores")
 			}
 		};
+=======
+		objetoTapete.tapete.ondrop = getFuncionSoltarReceptores(objetoTapete);
+>>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 	}
 
 	const tapeteSobrantes = getTapeteObject('sobrantes');
 	tapeteSobrantes.tapete.ondragenter = function(e) { e.preventDefault(); };
 	tapeteSobrantes.tapete.ondragover = function(e) { e.preventDefault(); };
 	tapeteSobrantes.tapete.ondragleave = function(e) { e.preventDefault(); };
-	tapeteSobrantes.tapete.ondrop = function(event) {
+	tapeteSobrantes.tapete.ondrop = getFuncionSoltarSobrantes(tapeteSobrantes);
+}
+
+// Funcion drop tapetes receptores
+function getFuncionSoltarReceptores(objetoTapete) {
+	return function(event) {
+		event.preventDefault();
+		let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));
+		if (tapeteOrigen.id === 'inicial' || tapeteOrigen.id === 'sobrantes') {
+			let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
+			if ( movimientoValido(carta, objetoTapete) ) {
+				moverCartaTapete(carta, tapeteOrigen, objetoTapete)
+				carta.draggable = false;
+			}
+		} else {
+			console.log("No se pueden mover cartas de los tapetes receptores")
+		}
+	};
+}
+
+// Funcion drop tapete sobrantes
+function getFuncionSoltarSobrantes(tapeteSobrantes) {
+	return function(event) {
 		event.preventDefault();
 		let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));
 		if (tapeteOrigen.id === 'inicial') {
@@ -132,6 +199,7 @@ function configurarTapetes() {
 	}
 }
 
+// Rutina para mover una carta de un tapete a otro
 function moverCartaTapete(carta, origen, destino) {
 	origen.tapete.removeChild(carta);
 	decContador(origen.contador);
@@ -148,13 +216,19 @@ function moverCartaTapete(carta, origen, destino) {
 	incContador(destino.contador);
 	destino.mazo.push(carta);
 	incContador(contMovimientos);
+<<<<<<< HEAD
 	}
+=======
+>>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 }
 
+// Validador de movimientos de cartas
 function movimientoValido(carta, tapeteDestino) {
 	if (tapeteDestino.mazo.length === 0) {
-		return carta.dataset['numero'] == "12";
+		return carta.dataset['numero'] === "12";
+		// TODO: check
 	} else {
+<<<<<<< HEAD
 		let cartaDestino = tapeteDestino.mazo[tapeteDestino.length-1];
 		let cartaMover = carta.dataset['numero'];
 		if(cartaMover == "11"){
@@ -168,37 +242,34 @@ function movimientoValido(carta, tapeteDestino) {
 		}
 		
 		// Comprobar con los datos de la carta destino si es compatible en color y en numero
+=======
+		console.log(tapeteDestino)
+		let cartaDestino = tapeteDestino.mazo[tapeteDestino.mazo.length-1]
+		let numeroCartaDestino = cartaDestino.dataset["numero"]
+		let numeroCarta = carta.dataset["numero"]
+		let paloCartaDestino = cartaDestino.dataset["palo"]
+		let paloCarta = carta.dataset["palo"]
+		if (sonPalosCompatibles(paloCartaDestino, paloCarta)) {
+			if (numeroCarta === numeroCartaDestino - 1) {
+				return true;
+			}
+		}
+		return false;
+>>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 	}
 }
 
-function getTapeteObject(idTapete) {
-	return tapetesMazos.find((tapete) => tapete.id === idTapete);
+// Comprueba si los palos son compatibles para que una carta se ponga sobre otra
+function sonPalosCompatibles(palo1, palo2) {
+	if (colores.gris.includes(palo1)) {
+		return colores.naranja.includes(palo2);
+	} else if (colores.naranja.includes(palo1)) {
+		return colores.gris.includes(palo2);
+	}
+	return false;
 }
 
-/**
-	Se debe encargar de arrancar el temporizador: cada 1000 ms se
-	debe ejecutar una función que a partir de la cuenta autoincrementada
-	de los segundos (segundos totales) visualice el tiempo oportunamente con el 
-	format hh:mm:ss en el contador adecuado.
-
-	Para descomponer los segundos en horas, minutos y segundos pueden emplearse
-	las siguientes igualdades:
-
-	segundos = truncar (   segundos_totales % (60)                 )
-	minutos  = truncar ( ( segundos_totales % (60*60) )     / 60   )
-	horas    = truncar ( ( segundos_totales % (60*60*24)) ) / 3600 )
-
-	donde % denota la operación módulo (resto de la división entre los operadores)
-
-	Así, por ejemplo, si la cuenta de segundos totales es de 134 s, entonces será:
-	   00:02:14
-
-	Como existe la posibilidad de "resetear" el juego en cualquier momento, hay que 
-	evitar que exista más de un temporizador simultáneo, por lo que debería guardarse
-	el resultado de la llamada a setInterval en alguna variable para llamar oportunamente
-	a clearInterval en su caso.   
-*/
-
+// Inicia el contador a cero
 function arrancarTiempo(){
 	if (temporizador) clearInterval(temporizador);
     let hms = function (){
@@ -217,19 +288,14 @@ function arrancarTiempo(){
 	temporizador = setInterval(hms, 1000);
 } // arrancarTiempo
 
-
-/**
-	Si mazo es un array de elementos <img>, en esta rutina debe ser
-	reordenado aleatoriamente. Al ser un array un objeto, se pasa
-	por referencia, de modo que si se altera el orden de dicho array
-	dentro de la rutina, esto aparecerá reflejado fuera de la misma.
-*/
+// Mueve aleatoriamente las posiciones de las cartas del mazo inicial
 function barajar(mazo) {
 	const mazoBarajado = mazo.sort(() => Math.random()-0.5);
 	getTapeteObject('inicial').contador.innerHTML = mazoBarajado.length + "";
 	return mazo;	
 }
 
+// Encargada de meter en el tapete incial las cartas, con un efecto lento usando timeouts
 function cargarTapeteInicial(mazo) {
 	for (let carta = 0; carta < mazo.length; carta++) {
 		// Le damos un timeout para dar el efecto de que se van colocando poco a poco y no de golpe
@@ -237,6 +303,7 @@ function cargarTapeteInicial(mazo) {
 	}
 }
 
+<<<<<<< HEAD
 function recargarTapeteInicial(tapeteSobrantes){
 	const tapeteInicial = getTapeteObject('inicial');	
 		cargarTapeteInicial(tapeteSobrantes.mazo);		
@@ -245,6 +312,9 @@ function recargarTapeteInicial(tapeteSobrantes){
 		return tapeteInicial.mazo;
 }
 
+=======
+// Configura la carta que se carga en el tapete con su funcionalidad drag y sus datos de evento
+>>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 function cargarCarta(carta, indice, total) {
 	carta.style.position = "absolute";
 	carta.style.top = ""+(5 * indice)+"px";
@@ -272,27 +342,30 @@ function cargarCarta(carta, indice, total) {
 	}
 }
 
+// Elimina todos los hijos del componente tapete (que no sean contadores)
 function vaciarTapete(tapete) {
 	while(tapete.firstChild && !tapete.lastChild.id.includes('contador')) {
 		tapete.removeChild(tapete.lastChild);
 	}
 }
 
-
+// Incrementa en uno el contador
 function incContador(contador){
 	contador.innerHTML = parseInt(contador.innerHTML) + 1;
 	return contador;
 }
 
+// Decrementa en uno el contador
 function decContador(contador){
-	contador.innerHTML = "" + parseInt(contador.innerHTML) - 1
+	contador.innerHTML = parseInt(contador.innerHTML) - 1
 	return contador;
 }
 
+// Setea un valor personalizado en un contador
 function setContador(contador, valor) {
-	contTiempo.innerHTML = "" + valor;
+	contTiempo.innerHTML = valor;
 
-} // setContador
+}
 
 body = document.body;
 body.addEventListener('onload', arrancarTiempo());
