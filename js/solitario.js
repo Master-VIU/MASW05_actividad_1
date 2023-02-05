@@ -298,3 +298,7 @@ body = document.body;
 body.addEventListener('onload', arrancarTiempo());
 body.addEventListener('onload', comenzarJuego());
 
+botonReset.addEventListener('click', _ =>{
+	location.reload();
+});
+
