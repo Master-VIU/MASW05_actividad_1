@@ -147,6 +147,7 @@ function moverCartaTapete(carta, origen, destino) {
 	destino.tapete.appendChild(carta);
 	incContador(destino.contador);
 	destino.mazo.push(carta);
+	incContador(contMovimientos);
 	}
 }
 
@@ -154,7 +155,7 @@ function movimientoValido(carta, tapeteDestino) {
 	if (tapeteDestino.mazo.length === 0) {
 		return carta.dataset['numero'] == "12";
 	} else {
-		let cartaDestino = tapeteDestino.mazo[tapeteDestino.length-1]
+		let cartaDestino = tapeteDestino.mazo[tapeteDestino.length-1];
 		let cartaMover = carta.dataset['numero'];
 		if(cartaMover == "11"){
 			return carta.dataset['numero'] == "11";
@@ -240,8 +241,9 @@ function recargarTapeteInicial(tapeteSobrantes){
 	const tapeteInicial = getTapeteObject('inicial');	
 		cargarTapeteInicial(tapeteSobrantes.mazo);		
 		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
-		console.log(tapeteSobrantes.mazo.length);
+		console.log(tapeteInicial.mazo.length);
 		getTapeteObject("sobrantes").contador.innerHTML = "0";
+		return tapeteInicial.mazo;
 }
 
 function cargarCarta(carta, indice, total) {
