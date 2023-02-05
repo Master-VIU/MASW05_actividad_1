@@ -62,9 +62,6 @@ function comenzarJuego() {
 
 	// Inicio del juego
 	botonReset.disabled = true;
-<<<<<<< HEAD
-	
-=======
 	ponerACeroTapetes();
 	contMovimientos.innerHTML = "0";
 
@@ -93,7 +90,6 @@ function ponerACeroTapetes() {
 
 // Funcion que instancia todos los elementos img y los deja en el mazo inicial
 function cargarBaraja() {
->>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 	for (let iteradorPalo = 0; iteradorPalo < palos.length; iteradorPalo++) {
 		for (let iteradorNumero = 0; iteradorNumero < numeros.length; iteradorNumero++) {
 			let temporalImage = document.createElement("img");
@@ -109,29 +105,7 @@ function cargarBaraja() {
 	}
 }
 
-<<<<<<< HEAD
-	getTapeteObject("inicial").contador.innerHTML = "0";
-	getTapeteObject("receptor1").contador.innerHTML = "0";
-	getTapeteObject("receptor2").contador.innerHTML = "0";
-	getTapeteObject("receptor3").contador.innerHTML = "0";
-	getTapeteObject("receptor4").contador.innerHTML = "0";
-	getTapeteObject("sobrantes").contador.innerHTML = "0";
-	contMovimientos.innerHTML = "0";
-
-	configurarTapetes();
-
-	// Barajar y dejar mazoInicial en tapete inicial
-	const tapeteInicial = getTapeteObject('inicial');
-	tapeteInicial.mazo = barajar(tapeteInicial.mazo);
-	vaciarTapete(tapeteInicial.tapete);
-	cargarTapeteInicial(tapeteInicial.mazo);		
-	// Arrancar el conteo de tiempo
-	arrancarTiempo();
-} // comenzarJuego
-
-=======
 // Encargada de configurar las propiedades y comportamientos de los tapetes
->>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 function configurarTapetes() {
 	const tapetesDraggeables = tapetesMazos.filter((tapete) => {
 		const draggeable = ["receptor1", "receptor2", "receptor3", "receptor4"]
@@ -142,23 +116,7 @@ function configurarTapetes() {
 		objetoTapete.tapete.ondragenter = function(e) { e.preventDefault(); };
 		objetoTapete.tapete.ondragover = function(e) { e.preventDefault(); };
 		objetoTapete.tapete.ondragleave = function(e) { e.preventDefault(); };
-<<<<<<< HEAD
-		objetoTapete.tapete.ondrop = function(event) {
-			event.preventDefault();
-			let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));		
-			if (tapeteOrigen.id === 'inicial' || tapeteOrigen.id === 'sobrantes') {
-				let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
-				if ( movimientoValido(carta, objetoTapete) ) {
-					moverCartaTapete(carta, tapeteOrigen, objetoTapete)
-					carta.draggable = false;
-				}
-			} else {
-				console.log("No se pueden mover cartas de los tapetes receptores")
-			}
-		};
-=======
 		objetoTapete.tapete.ondrop = getFuncionSoltarReceptores(objetoTapete);
->>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 	}
 
 	const tapeteSobrantes = getTapeteObject('sobrantes');
@@ -216,10 +174,8 @@ function moverCartaTapete(carta, origen, destino) {
 	incContador(destino.contador);
 	destino.mazo.push(carta);
 	incContador(contMovimientos);
-<<<<<<< HEAD
 	}
-=======
->>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
+
 }
 
 // Validador de movimientos de cartas
@@ -227,24 +183,11 @@ function movimientoValido(carta, tapeteDestino) {
 	if (tapeteDestino.mazo.length === 0) {
 		return carta.dataset['numero'] === "12";
 		// TODO: check
-	} else {
-<<<<<<< HEAD
-		let cartaDestino = tapeteDestino.mazo[tapeteDestino.length-1];
-		let cartaMover = carta.dataset['numero'];
-		if(cartaMover == "11"){
-			return carta.dataset['numero'] == "11";
-		}if(cartaMover == "10"){
-			return carta.dataset['numero'] == "10";
-		}if(cartaMover == "9"){
-			return carta.dataset['numero'] == "9";
-		}if(cartaMover == "8"){
-			return carta.dataset['numero'] == "8";
-		}
-		
+	} else {			
 		// Comprobar con los datos de la carta destino si es compatible en color y en numero
-=======
-		console.log(tapeteDestino)
+		
 		let cartaDestino = tapeteDestino.mazo[tapeteDestino.mazo.length-1]
+		console.log(tapeteDestino)
 		let numeroCartaDestino = cartaDestino.dataset["numero"]
 		let numeroCarta = carta.dataset["numero"]
 		let paloCartaDestino = cartaDestino.dataset["palo"]
@@ -255,7 +198,6 @@ function movimientoValido(carta, tapeteDestino) {
 			}
 		}
 		return false;
->>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 	}
 }
 
@@ -268,7 +210,6 @@ function sonPalosCompatibles(palo1, palo2) {
 	}
 	return false;
 }
-
 // Inicia el contador a cero
 function arrancarTiempo(){
 	if (temporizador) clearInterval(temporizador);
@@ -303,24 +244,12 @@ function cargarTapeteInicial(mazo) {
 	}
 }
 
-<<<<<<< HEAD
-function recargarTapeteInicial(tapeteSobrantes){
-	const tapeteInicial = getTapeteObject('inicial');	
-		cargarTapeteInicial(tapeteSobrantes.mazo);		
-		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
-		getTapeteObject("sobrantes").contador.innerHTML = "0";
-		return tapeteInicial.mazo;
-}
-
-=======
 // Configura la carta que se carga en el tapete con su funcionalidad drag y sus datos de evento
->>>>>>> f66d253a40007ad62b37949698a5e5fddec65055
 function cargarCarta(carta, indice, total) {
 	carta.style.position = "absolute";
 	carta.style.top = ""+(5 * indice)+"px";
 	carta.style.left = ""+(5 * indice)+"px";
 	carta.draggable = false;
-
 	let dragged = undefined;
 	carta.addEventListener("dragstart", (event) => {
 		// store a ref. on the dragged elem
@@ -342,6 +271,15 @@ function cargarCarta(carta, indice, total) {
 	}
 }
 
+function recargarTapeteInicial(tapeteSobrantes){
+	const tapeteInicial = getTapeteObject('inicial');	
+		cargarTapeteInicial(tapeteSobrantes.mazo);		
+		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
+		console.log(tapeteInicial.mazo.length);
+		getTapeteObject("sobrantes").contador.innerHTML = "0";
+		return tapeteInicial.mazo;
+}
+
 // Elimina todos los hijos del componente tapete (que no sean contadores)
 function vaciarTapete(tapete) {
 	while(tapete.firstChild && !tapete.lastChild.id.includes('contador')) {
@@ -355,7 +293,6 @@ function incContador(contador){
 	return contador;
 }
 
-// Decrementa en uno el contador
 function decContador(contador){
 	contador.innerHTML = parseInt(contador.innerHTML) - 1
 	return contador;
@@ -365,7 +302,7 @@ function decContador(contador){
 function setContador(contador, valor) {
 	contTiempo.innerHTML = valor;
 
-}
+} 
 
 body = document.body;
 body.addEventListener('onload', arrancarTiempo());
@@ -373,5 +310,4 @@ body.addEventListener('onload', comenzarJuego());
 
 botonReset.addEventListener('click', _ =>{
 	location.reload();
-});
-
+})
