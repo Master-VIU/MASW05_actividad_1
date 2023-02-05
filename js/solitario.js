@@ -56,7 +56,7 @@ let temporizador = null; // manejador del temporizador
 function comenzarJuego() {
 
 	botonReset.disabled = true;
-
+	
 	for (let iteradorPalo = 0; iteradorPalo < palos.length; iteradorPalo++) {
 		for (let iteradorNumero = 0; iteradorNumero < numeros.length; iteradorNumero++) {
 			let temporalImage = document.createElement("img");
@@ -241,7 +241,6 @@ function recargarTapeteInicial(tapeteSobrantes){
 	const tapeteInicial = getTapeteObject('inicial');	
 		cargarTapeteInicial(tapeteSobrantes.mazo);		
 		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
-		console.log(tapeteInicial.mazo.length);
 		getTapeteObject("sobrantes").contador.innerHTML = "0";
 		return tapeteInicial.mazo;
 }
