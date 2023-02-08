@@ -159,12 +159,21 @@ function getFuncionSoltarSobrantes(tapeteSobrantes) {
 
 // Rutina para mover una carta de un tapete a otro
 function moverCartaTapete(carta, origen, destino) {
+	var movimientos = contMovimientos.innerHTML;
 	origen.tapete.removeChild(carta);
 	decContador(origen.contador);
 	origen.mazo.pop();
 	const tapeteInicial = getTapeteObject('inicial');
 	if(tapeteInicial.mazo.length == "0"){
-		recargarTapeteInicial(getTapeteObject('sobrantes'));
+		let sobrantes = getTapeteObject('sobrantes');
+		cargarTapeteInicial(sobrantes.mazo);		
+		tapeteInicial.mazo = barajar(sobrantes.mazo);
+		(tapeteInicial.mazo.length - 1).draggable = true;
+		console.log(tapeteInicial.mazo.length);
+	carta.style.top = "50%";
+	carta.style.left = "50%";
+		console.log('HOOLA!!');
+		sobrantes.contador.innerHTML = "0";	
 	} else {
 	origen.mazo[origen.mazo.length - 1].draggable = true;
 	carta.style.top = "50%";
@@ -187,13 +196,12 @@ function movimientoValido(carta, tapeteDestino) {
 		// Comprobar con los datos de la carta destino si es compatible en color y en numero
 		
 		let cartaDestino = tapeteDestino.mazo[tapeteDestino.mazo.length-1]
-		console.log(tapeteDestino)
-		let numeroCartaDestino = cartaDestino.dataset["numero"]
+		let numeroCartaDestino = cartaDestino.dataset["numero"];			
 		let numeroCarta = carta.dataset["numero"]
 		let paloCartaDestino = cartaDestino.dataset["palo"]
 		let paloCarta = carta.dataset["palo"]
 		if (sonPalosCompatibles(paloCartaDestino, paloCarta)) {
-			if (numeroCarta === numeroCartaDestino - 1) {
+			if (numeroCarta == numeroCartaDestino - 1) {
 				return true;
 			}
 		}
@@ -271,14 +279,13 @@ function cargarCarta(carta, indice, total) {
 	}
 }
 
-function recargarTapeteInicial(tapeteSobrantes){
+/*function recargarTapeteInicial(tapeteSobrantes){
 	const tapeteInicial = getTapeteObject('inicial');	
 		cargarTapeteInicial(tapeteSobrantes.mazo);		
 		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
-		console.log(tapeteInicial.mazo.length);
 		getTapeteObject("sobrantes").contador.innerHTML = "0";
-		return tapeteInicial.mazo;
-}
+		//tapeteInicial.mazo[tapeteInicial.mazo.length - 1].draggable = true;
+}*/
 
 // Elimina todos los hijos del componente tapete (que no sean contadores)
 function vaciarTapete(tapete) {
