@@ -74,9 +74,6 @@ function comenzarJuego() {
 	tapeteInicial.mazo = barajar(tapeteInicial.mazo);
 	vaciarTapete(tapeteInicial.tapete);
 	cargarTapeteInicial(tapeteInicial.mazo);
-	
-	// Arrancar el conteo de tiempo
-	arrancarTiempo();
 }
 
 // Para todos los tapetes, poner el contador a cero y vaciar el mazo
@@ -168,12 +165,9 @@ function moverCartaTapete(carta, origen, destino) {
 		let sobrantes = getTapeteObject('sobrantes');
 		cargarTapeteInicial(sobrantes.mazo);		
 		tapeteInicial.mazo = barajar(sobrantes.mazo);
+		[carta - 1].draggable = true;
 		(tapeteInicial.mazo.length).draggable = true;
-		console.log(tapeteInicial.mazo.length);
-		console.log(tapeteInicial.mazo.map);
-	carta.style.top = "50%";
-	carta.style.left = "50%";
-		console.log('HOOLA!!');
+		console.log(carta);
 		sobrantes.contador.innerHTML = "0";	
 	} else {
 	origen.mazo[origen.mazo.length - 1].draggable = true;
