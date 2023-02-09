@@ -197,7 +197,6 @@ function moverCartaTapete(carta, origen, destino) {
 		sobrantes.contador.innerHTML = "0";	
 	} else{
 		origen.mazo[origen.mazo.length - 1].draggable = true	
-	}
 	
 	//origen.mazo[origen.mazo.length - 1].draggable = true;
 	//carta.style.top = "50%";
@@ -209,7 +208,8 @@ function moverCartaTapete(carta, origen, destino) {
 	//destino.mazo.push(carta);
 	//incContador(contMovimientos);
 	
-
+		}
+	}
 }
 
 
