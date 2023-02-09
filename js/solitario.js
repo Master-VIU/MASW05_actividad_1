@@ -166,10 +166,8 @@ function moverCartaTapete(carta, origen, destino) {
 	if(tapeteInicial.mazo.length == "0"){
 		let sobrantes = getTapeteObject('sobrantes');
 		cargarTapeteInicial(sobrantes.mazo);		
-		tapeteInicial.mazo = barajar(sobrantes.mazo);
-		[carta - 1].draggable = true;
-		(tapeteInicial.mazo.length).draggable = true;
-		console.log(carta);
+		tapeteInicial.mazo = barajar(sobrantes.mazo);		
+		(tapeteInicial.mazo.length).draggable = true;		
 		sobrantes.contador.innerHTML = "0";	
 	} else {
 	origen.mazo[origen.mazo.length - 1].draggable = true;
@@ -304,14 +302,6 @@ function cargarCarta(carta, indice, total) {
 		carta.draggable = true;
 	}
 }
-
-/*function recargarTapeteInicial(tapeteSobrantes){
-	const tapeteInicial = getTapeteObject('inicial');	
-		cargarTapeteInicial(tapeteSobrantes.mazo);		
-		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
-		getTapeteObject("sobrantes").contador.innerHTML = "0";
-		//tapeteInicial.mazo[tapeteInicial.mazo.length - 1].draggable = true;
-}*/
 
 // Elimina todos los hijos del componente tapete (que no sean contadores)
 function vaciarTapete(tapete) {
