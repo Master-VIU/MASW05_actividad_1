@@ -131,7 +131,8 @@ function getFuncionSoltarReceptores(objetoTapete) {
 		if (tapeteOrigen.id === 'inicial' || tapeteOrigen.id === 'sobrantes') {
 			let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
 			if ( movimientoValido(carta, objetoTapete) ) {
-				moverCartaTapete(carta, tapeteOrigen, objetoTapete)
+				console.log(tapeteOrigen.id);
+				moverCartaTapete(carta, tapeteOrigen, objetoTapete);
 				carta.draggable = false;
 			}
 		} else {
@@ -145,9 +146,10 @@ function getFuncionSoltarSobrantes(tapeteSobrantes) {
 	return function(event) {
 		event.preventDefault();
 		let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));
-		if (tapeteOrigen.id === 'inicial') {
+		if (tapeteOrigen.id == 'inicial') {
 			let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
 			moverCartaTapete(carta, tapeteOrigen, tapeteSobrantes)
+			
 		} else {
 			console.log("No se pueden mover cartas de los tapetes receptores")
 		}
@@ -178,9 +180,38 @@ function moverCartaTapete(carta, origen, destino) {
 	incContador(destino.contador);
 	destino.mazo.push(carta);
 	incContador(contMovimientos);
+	console.log('carta desde' + origen.id);
+	let tapeteInicial = getTapeteObject('inicial');
+	if(tapeteInicial.mazo.length == "0"){
+		vaciarTapete(tapeteInicial.tapete);
+		let sobrantes = getTapeteObject('sobrantes');
+		tapeteInicial.mazo = barajar(sobrantes.mazo);
+		cargarTapeteInicial(tapeteInicial.mazo);		
+		//(tapeteInicial.mazo.length - 1).draggable = true;
+		console.log(tapeteInicial.mazo.length);
+	    //carta.style.top = "50%";
+	    //carta.style.left = "50%";
+		console.log('HOOLA!!');
+		
+		mostrarMazo(getTapeteObject('inicial'));
+		sobrantes.contador.innerHTML = "0";	
+	} else{
+		origen.mazo[origen.mazo.length - 1].draggable = true	
 	}
+	
+	//origen.mazo[origen.mazo.length - 1].draggable = true;
+	//carta.style.top = "50%";
+	//carta.style.left = "50%";
+	//carta.style.transform="translate(-50%, -50%)";
+	//carta.dataset["tapete"] = destino.id;
+	//destino.tapete.appendChild(carta);
+	//incContador(destino.contador);
+	//destino.mazo.push(carta);
+	//incContador(contMovimientos);
+	
 
 }
+
 
 // Validador de movimientos de cartas
 function movimientoValido(carta, tapeteDestino) {
@@ -305,6 +336,15 @@ function setContador(contador, valor) {
 	contTiempo.innerHTML = valor;
 
 } 
+
+function mostrarMazo(tap){
+    let mazo=tap.mazo;
+	for (let carta = 0; carta < mazo.length; carta++) {
+		
+		console.log(mazo[carta].dataset["numero"]+"/"+mazo[carta].dataset["palo"]+"/"+mazo[carta].dataset["tapete"] )
+		
+       }
+}
 
 body = document.body;
 body.addEventListener('onload', arrancarTiempo());
