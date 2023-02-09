@@ -131,13 +131,11 @@ function getFuncionSoltarReceptores(objetoTapete) {
 	return function(event) {
 		event.preventDefault();
 		let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));
-		if (tapeteOrigen.id == 'inicial' || tapeteOrigen.id == 'sobrantes') {
+		if (tapeteOrigen.id === 'inicial' || tapeteOrigen.id === 'sobrantes') {
 			let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
 			if ( movimientoValido(carta, objetoTapete) ) {
-				console.log(tapeteOrigen.id);
 				moverCartaTapete(carta, tapeteOrigen, objetoTapete)
 				carta.draggable = false;
-				
 			}
 		} else {
 			console.log("No se pueden mover cartas de los tapetes receptores")
@@ -162,7 +160,6 @@ function getFuncionSoltarSobrantes(tapeteSobrantes) {
 // Rutina para mover una carta de un tapete a otro
 function moverCartaTapete(carta, origen, destino) {
 	var movimientos = contMovimientos.innerHTML;
-	console.log('carta desde' + origen.id);
 	origen.tapete.removeChild(carta);
 	decContador(origen.contador);
 	origen.mazo.pop();
@@ -183,7 +180,6 @@ function moverCartaTapete(carta, origen, destino) {
 	carta.style.top = "50%";
 	carta.style.left = "50%";
 	carta.style.transform="translate(-50%, -50%)";
-	carta.dataset["tapete"] = destino.id;
 	destino.tapete.appendChild(carta);
 	incContador(destino.contador);
 	destino.mazo.push(carta);
@@ -252,14 +248,13 @@ function barajar(mazo) {
 // Encargada de meter en el tapete incial las cartas, con un efecto lento usando timeouts
 function cargarTapeteInicial(mazo) {
 	for (let carta = 0; carta < mazo.length; carta++) {
-		mazo[carta].dataset["tapete"] = "inicial";
 		// Le damos un timeout para dar el efecto de que se van colocando poco a poco y no de golpe
-		setTimeout(cargarCarta, 50*carta, mazo[carta], carta, mazo.length,'inicial');
+		setTimeout(cargarCarta, 50*carta, mazo[carta], carta, mazo.length);
 	}
 }
 
 // Configura la carta que se carga en el tapete con su funcionalidad drag y sus datos de evento
-function cargarCarta(carta, indice, total,tapete) {
+function cargarCarta(carta, indice, total) {
 	carta.style.position = "absolute";
 	carta.style.top = ""+(5 * indice)+"px";
 	carta.style.left = ""+(5 * indice)+"px";
@@ -268,16 +263,16 @@ function cargarCarta(carta, indice, total,tapete) {
 	carta.addEventListener("dragstart", (event) => {
 		// store a ref. on the dragged elem
 		dragged = event.target;
-		console.log('Carta atrapada: ' + event.target.dataset["palo"] + " / " + event.target.dataset["numero"] + event.target.dataset["tapete"]);
+		console.log('Carta atrapada: ' + event.target.dataset["palo"] + " / " + event.target.dataset["numero"]);
 		event.dataTransfer.setData( "text/plain/numero", event.target.dataset["numero"] );
 		event.dataTransfer.setData( "text/plain/palo", event.target.dataset["palo"] );
-		event.dataTransfer.setData( "text/plain/tapete", event.target.dataset["tapete"]);
+		event.dataTransfer.setData( "text/plain/tapete", "inicial");
 		event.dataTransfer.setData( "text/plain/id", event.target.id );
 	});
 	carta.addEventListener("drag", () => {});
 	carta.addEventListener("dragend", () => {});
-	getTapeteObject(tapete).tapete.appendChild(carta);
-	if (indice == total - 1) {
+	getTapeteObject('inicial').tapete.appendChild(carta);
+	if (indice === total - 1) {
 		// Habilitamos el boton de reseteo por si se quiere reiniciar la partida
 		// Se pone la ultima carta del monton con el atributo draggable a true, para que se pueda arrastrar
 		botonReset.disabled = false;
@@ -290,7 +285,7 @@ function cargarCarta(carta, indice, total,tapete) {
 		cargarTapeteInicial(tapeteSobrantes.mazo);		
 		tapeteInicial.mazo = barajar(tapeteSobrantes.mazo);
 		getTapeteObject("sobrantes").contador.innerHTML = "0";
-		tapeteInicial.mazo[tapeteInicial.mazo.length - 1].draggable = true;
+		//tapeteInicial.mazo[tapeteInicial.mazo.length - 1].draggable = true;
 }*/
 
 // Elimina todos los hijos del componente tapete (que no sean contadores)
