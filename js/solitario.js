@@ -74,6 +74,9 @@ function comenzarJuego() {
 	tapeteInicial.mazo = barajar(tapeteInicial.mazo);
 	vaciarTapete(tapeteInicial.tapete);
 	cargarTapeteInicial(tapeteInicial.mazo);
+
+	// Arrancar el conteo de tiempo
+	arrancarTiempo();
 }
 
 // Para todos los tapetes, poner el contador a cero y vaciar el mazo
@@ -128,7 +131,7 @@ function getFuncionSoltarReceptores(objetoTapete) {
 	return function(event) {
 		event.preventDefault();
 		let tapeteOrigen = getTapeteObject(event.dataTransfer.getData("text/plain/tapete"));
-		if (tapeteOrigen.id === 'inicial' || tapeteOrigen.id === 'sobrantes') {
+		if (tapeteOrigen.id == 'inicial' || tapeteOrigen.id == 'sobrantes') {
 			let carta = document.getElementById(event.dataTransfer.getData("text/plain/id"));
 			if ( movimientoValido(carta, objetoTapete) ) {
 				console.log(tapeteOrigen.id);
@@ -159,6 +162,7 @@ function getFuncionSoltarSobrantes(tapeteSobrantes) {
 // Rutina para mover una carta de un tapete a otro
 function moverCartaTapete(carta, origen, destino) {
 	var movimientos = contMovimientos.innerHTML;
+	console.log('carta desde' + origen.id);
 	origen.tapete.removeChild(carta);
 	decContador(origen.contador);
 	origen.mazo.pop();
@@ -166,49 +170,27 @@ function moverCartaTapete(carta, origen, destino) {
 	if(tapeteInicial.mazo.length == "0"){
 		let sobrantes = getTapeteObject('sobrantes');
 		cargarTapeteInicial(sobrantes.mazo);		
-		tapeteInicial.mazo = barajar(sobrantes.mazo);		
-		(tapeteInicial.mazo.length).draggable = true;		
+		tapeteInicial.mazo = barajar(sobrantes.mazo);
+		(tapeteInicial.mazo.length - 1).draggable = true;
+		console.log(tapeteInicial.mazo.length);
+	carta.style.top = "50%";
+	carta.style.left = "50%";
+		console.log('HOOLA!!');
 		sobrantes.contador.innerHTML = "0";	
 	} else {
 	origen.mazo[origen.mazo.length - 1].draggable = true;
 	carta.style.top = "50%";
 	carta.style.left = "50%";
 	carta.style.transform="translate(-50%, -50%)";
+	carta.dataset["tapete"] = destino.id;
 	destino.tapete.appendChild(carta);
 	incContador(destino.contador);
 	destino.mazo.push(carta);
 	incContador(contMovimientos);
-	console.log('carta desde' + origen.id);
-	let tapeteInicial = getTapeteObject('inicial');
-	if(tapeteInicial.mazo.length == "0"){
-		vaciarTapete(tapeteInicial.tapete);
-		let sobrantes = getTapeteObject('sobrantes');
-		tapeteInicial.mazo = barajar(sobrantes.mazo);
-		cargarTapeteInicial(tapeteInicial.mazo);		
-		//(tapeteInicial.mazo.length - 1).draggable = true;
-		console.log(tapeteInicial.mazo.length);
-	    //carta.style.top = "50%";
-	    //carta.style.left = "50%";
-		console.log('HOOLA!!');
-		
-		mostrarMazo(getTapeteObject('inicial'));
-		sobrantes.contador.innerHTML = "0";	
-	} else{
-		origen.mazo[origen.mazo.length - 1].draggable = true	
-	
-	//origen.mazo[origen.mazo.length - 1].draggable = true;
-	//carta.style.top = "50%";
-	//carta.style.left = "50%";
-	//carta.style.transform="translate(-50%, -50%)";
-	//carta.dataset["tapete"] = destino.id;
-	//destino.tapete.appendChild(carta);
-	//incContador(destino.contador);
-	//destino.mazo.push(carta);
-	//incContador(contMovimientos);
-	
-		}
 	}
+
 }
+
 
 
 // Validador de movimientos de cartas
@@ -271,6 +253,7 @@ function barajar(mazo) {
 // Encargada de meter en el tapete incial las cartas, con un efecto lento usando timeouts
 function cargarTapeteInicial(mazo) {
 	for (let carta = 0; carta < mazo.length; carta++) {
+		mazo[carta].dataset["tapete"] = "inicial";
 		// Le damos un timeout para dar el efecto de que se van colocando poco a poco y no de golpe
 		setTimeout(cargarCarta, 50*carta, mazo[carta], carta, mazo.length);
 	}
@@ -289,13 +272,13 @@ function cargarCarta(carta, indice, total) {
 		console.log('Carta atrapada: ' + event.target.dataset["palo"] + " / " + event.target.dataset["numero"]);
 		event.dataTransfer.setData( "text/plain/numero", event.target.dataset["numero"] );
 		event.dataTransfer.setData( "text/plain/palo", event.target.dataset["palo"] );
-		event.dataTransfer.setData( "text/plain/tapete", "inicial");
+		event.dataTransfer.setData( "text/plain/tapete", event.target.dataset["tapete"]);
 		event.dataTransfer.setData( "text/plain/id", event.target.id );
 	});
 	carta.addEventListener("drag", () => {});
 	carta.addEventListener("dragend", () => {});
 	getTapeteObject('inicial').tapete.appendChild(carta);
-	if (indice === total - 1) {
+	if (indice == total - 1) {
 		// Habilitamos el boton de reseteo por si se quiere reiniciar la partida
 		// Se pone la ultima carta del monton con el atributo draggable a true, para que se pueda arrastrar
 		botonReset.disabled = false;
@@ -327,14 +310,6 @@ function setContador(contador, valor) {
 
 } 
 
-function mostrarMazo(tap){
-    let mazo=tap.mazo;
-	for (let carta = 0; carta < mazo.length; carta++) {
-		
-		console.log(mazo[carta].dataset["numero"]+"/"+mazo[carta].dataset["palo"]+"/"+mazo[carta].dataset["tapete"] )
-		
-       }
-}
 
 body = document.body;
 body.addEventListener('onload', arrancarTiempo());
