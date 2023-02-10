@@ -166,6 +166,14 @@ function moverCartaTapete(carta, origen, destino) {
 	origen.tapete.removeChild(carta);
 	decContador(origen.contador);
 	origen.mazo.pop();
+	carta.style.top = "50%";
+	carta.style.left = "50%";
+	carta.style.transform="translate(-50%, -50%)";
+	carta.dataset["tapete"] = destino.id;
+	destino.tapete.appendChild(carta);
+	incContador(destino.contador);
+	destino.mazo.push(carta);
+	incContador(contMovimientos);
 	const tapeteInicial = getTapeteObject('inicial');
 	if(tapeteInicial.mazo.length == "0"){
 		let sobrantes = getTapeteObject('sobrantes');
@@ -178,15 +186,7 @@ function moverCartaTapete(carta, origen, destino) {
 		console.log('HOOLA!!');
 		sobrantes.contador.innerHTML = "0";	
 	} else {
-	origen.mazo[origen.mazo.length - 1].draggable = true;
-	carta.style.top = "50%";
-	carta.style.left = "50%";
-	carta.style.transform="translate(-50%, -50%)";
-	carta.dataset["tapete"] = destino.id;
-	destino.tapete.appendChild(carta);
-	incContador(destino.contador);
-	destino.mazo.push(carta);
-	incContador(contMovimientos);
+		origen.mazo[origen.mazo.length - 1].draggable = true;
 	}
 
 }
