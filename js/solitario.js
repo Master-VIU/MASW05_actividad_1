@@ -267,8 +267,12 @@ function arrancarTiempo() {
 
 // Mueve aleatoriamente las posiciones de las cartas del mazo inicial
 function barajar(mazo) {
-    const mazoBarajado = mazo.sort(() => Math.random() - 0.5);
-    setContador(getTapeteObject('inicial').contador, mazoBarajado.length);
+    for(var carta = mazo.length-1; carta > 0; carta--){
+        var cartaCambio = Math.floor( Math.random() * (carta + 1) ); //random cartandex
+        [mazo[carta], mazo[cartaCambio]] = [mazo[cartaCambio], mazo[carta]]; // swap
+    }
+    // const mazoBarajado = mazo.sort(() => Math.random() - 0.5);
+    setContador(getTapeteObject('inicial').contador, mazo.length);
     return mazo;
 }
 
