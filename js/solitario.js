@@ -1,11 +1,12 @@
+// DECLARACION DE VARIABLES
+
 let palos = ["viu", "cua", "hex", "cir"];
 let colores = {
     gris: ['cir', 'hex'],
     naranja: ['viu', 'cua']
-}
+};
 let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 let paso = 5;
-
 const tapetesMazos = [
     {
         id: "inicial",
@@ -43,17 +44,20 @@ const tapetesMazos = [
         mazo: [],
         contador: document.getElementById("contador_receptor4")
     }
-]
-
+];
 let contMovimientos = document.getElementById("contador_movimientos");
 let botonReset = document.getElementById("reset");
-
 let contTiempo = document.getElementById("contador_tiempo"); // span cuenta tiempo
 let segundos = 0;    // cuenta de segundos
 let temporizador = null; // manejador del temporizador
 
+// DECLARACION DE FUNCIONES
 
-// Funcion que devuelve el objeto tapete pasandole solo su id
+/*
+    Funcion que devuelve el objeto tapete pasandole solo su id
+    @param {string} idTapete
+    @returns {object} tapete
+*/
 function getTapeteObject(idTapete) {
     return tapetesMazos.find((tapete) => tapete.id === idTapete);
 }
@@ -94,7 +98,12 @@ function cargarBaraja() {
     }
 }
 
-// Encargada de crear el objeto img y de setear sus propiedades
+/*
+    Funcion que crea un elemento img con las propiedades de una carta
+    @param {number} numero
+    @param {string} palo
+    @returns {object} temporalImage
+*/
 function crearCarta(numero, palo) {
     const temporalImage = document.createElement("img");
     temporalImage.src = "./imagenes/baraja/" + numero + "-" + palo + ".png";
@@ -140,7 +149,11 @@ function configurarTapetes() {
     tapeteSobrantes.tapete.ondrop = getFuncionSoltarSobrantes(tapeteSobrantes);
 }
 
-// Funcion drop tapetes receptores
+/*
+    Funcion que devuelve una funcion que se encarga de soltar una carta en un tapete receptor
+    @param {object} objetoTapete
+    @returns {function} funcionSoltarReceptores
+*/
 function getFuncionSoltarReceptores(objetoTapete) {
     return function (event) {
         event.preventDefault();
@@ -157,7 +170,11 @@ function getFuncionSoltarReceptores(objetoTapete) {
     };
 }
 
-// Funcion drop tapete sobrantes
+/*
+    Funcion que devuelve una funcion que se encarga de soltar una carta en el tapete de sobrantes
+    @param {object} tapeteSobrantes
+    @returns {function} funcionSoltarSobrantes
+*/
 function getFuncionSoltarSobrantes(tapeteSobrantes) {
     return function (event) {
         event.preventDefault();
@@ -171,7 +188,12 @@ function getFuncionSoltarSobrantes(tapeteSobrantes) {
     }
 }
 
-// Rutina para mover una carta de un tapete a otro
+/*
+    Funcion que mueve una carta de un tapete a otro
+    @param {object} carta
+    @param {object} origen
+    @param {object} destino
+*/
 function moverCartaTapete(carta, origen, destino) {
     origen.tapete.removeChild(carta);
     decContador(origen.contador);
@@ -217,7 +239,12 @@ function moverCartasSobranteAInicial() {
     }
 }
 
-// Validador de movimientos de cartas
+/*
+    Funcion que comprueba si un movimiento es valido
+    @param {object} carta
+    @param {object} tapeteDestino
+    @returns {boolean} valido
+*/
 function movimientoValido(carta, tapeteDestino) {
     if (tapeteDestino.mazo.length === 0) {
         return carta.dataset['numero'] === "12";
@@ -237,7 +264,12 @@ function movimientoValido(carta, tapeteDestino) {
     }
 }
 
-// Comprueba si los palos son compatibles para que una carta se ponga sobre otra
+/*
+    Funcion que comprueba si dos palos no son del mismo color
+    @param {string} palo1
+    @param {string} palo2
+    @returns {boolean} valido
+*/
 function sonPalosCompatibles(palo1, palo2) {
     if (colores.gris.includes(palo1)) {
         return colores.naranja.includes(palo2);
@@ -265,10 +297,14 @@ function arrancarTiempo() {
     temporizador = setInterval(hms, 1000);
 } // arrancarTiempo
 
-// Mueve aleatoriamente las posiciones de las cartas del mazo inicial
+/*
+    Funcion que baraja un mazo de cartas
+    @param {array} mazo
+    @returns {array} mazoBarajado
+*/
 function barajar(mazo) {
-    for(var carta = mazo.length-1; carta > 0; carta--){
-        var cartaCambio = Math.floor( Math.random() * (carta + 1) ); //random cartandex
+    for (var carta = mazo.length - 1; carta > 0; carta--) {
+        var cartaCambio = Math.floor(Math.random() * (carta + 1)); //random cartandex
         [mazo[carta], mazo[cartaCambio]] = [mazo[cartaCambio], mazo[carta]]; // swap
     }
     // const mazoBarajado = mazo.sort(() => Math.random() - 0.5);
@@ -286,7 +322,12 @@ function cargarTapeteInicial() {
     }
 }
 
-// Configura la carta que se carga en el tapete con su funcionalidad drag y sus datos de evento
+/*
+    Funcion que carga una carta en el tapete inicial
+    @param {object} carta
+    @param {number} indice
+    @param {number} total
+*/
 function cargarCarta(carta, indice, total) {
     carta.style.position = "absolute";
     carta.style.top = "" + (5 * indice) + "px";
@@ -315,7 +356,10 @@ function cargarCarta(carta, indice, total) {
     }
 }
 
-// Elimina todos los hijos del componente tapete (que no sean contadores)
+/*
+    Function que elimina todas las cartas de un tapete
+    @param {object} tapeteObjeto
+*/
 function vaciarTapete(tapeteObjeto) {
     while (tapeteObjeto.tapete.firstChild && !tapeteObjeto.tapete.lastChild.id.includes('contador')) {
         tapeteObjeto.tapete.removeChild(tapeteObjeto.tapete.lastChild);
@@ -324,18 +368,27 @@ function vaciarTapete(tapeteObjeto) {
     setContador(tapeteObjeto.contador, 0);
 }
 
-// Incrementa en uno el contador
+/* 
+    Function que incrementa en uno un contador
+    @param {object} contador
+*/
 function incContador(contador) {
     contador.innerHTML = parseInt(contador.innerHTML) + 1;
-    return contador;
 }
 
+/*
+    Function que decrementa en uno un contador
+    @param {object} contador
+*/
 function decContador(contador) {
-    contador.innerHTML = parseInt(contador.innerHTML) - 1
-    return contador;
+    contador.innerHTML = parseInt(contador.innerHTML) - 1;
 }
 
-// Setea un valor personalizado en un contador
+/*
+    Function que establece el valor de un contador
+    @param {object} contador
+    @param {number} valor
+*/
 function setContador(contador, valor) {
     contador.innerHTML = valor;
 }
@@ -346,6 +399,8 @@ function finDelJuego() {
     alert("Enhorabuena!!\n Has finalizado el juego con un total de " + contMovimientos.innerHTML + " movimientos,\n en un" +
         "tiempo de " + contTiempo.innerHTML);
 }
+
+// PUESTA EN MARCHA CUANDO EL DOCUMENTO ESTA CARGADO
 
 body = document.body;
 body.addEventListener('onload', arrancarTiempo());
