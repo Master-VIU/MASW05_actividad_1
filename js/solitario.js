@@ -107,8 +107,8 @@ function cargarBaraja() {
 function crearCarta(numero, palo) {
     const temporalImage = document.createElement("img");
     temporalImage.src = "./imagenes/baraja/" + numero + "-" + palo + ".png";
-    temporalImage.width = 75;
-    temporalImage.height = 100;
+    temporalImage.width = 70;
+    temporalImage.height = 95;
     temporalImage.id = palo + numero;
     temporalImage.setAttribute("data-palo", palo);
     temporalImage.setAttribute("data-numero", numero);
@@ -225,7 +225,7 @@ function moverCartasSobranteAInicial() {
     let inicial = getTapeteObject('inicial');
 
     if (sobrantes.mazo.length === 0) {
-        finDelJuego();
+        setTimeout(finDelJuego, 100);
     } else {
         inicial.mazo = barajar(sobrantes.mazo);
         inicial.mazo.forEach((element) => {
