@@ -90,9 +90,9 @@ function ponerACeroTapetes() {
 
 // Funcion que instancia todos los elementos img y los deja en el mazo inicial
 function cargarBaraja() {
-    for (let iteradorPalo = 0; iteradorPalo < palos.length; iteradorPalo++) {
-        for (let iteradorNumero = 0; iteradorNumero < numeros.length; iteradorNumero++) {
-            const temporalImage = crearCarta(numeros[iteradorNumero], palos[iteradorPalo]);
+    for (let palo = 0; palo < palos.length; palo++) {
+        for (let numero = 0; numero < numeros.length; numero++) {
+            const temporalImage = crearCarta(numeros[numero], palos[palo]);
             getTapeteObject('inicial').mazo.push(temporalImage);
         }
     }
@@ -304,10 +304,9 @@ function arrancarTiempo() {
 */
 function barajar(mazo) {
     for (var carta = mazo.length - 1; carta > 0; carta--) {
-        var cartaCambio = Math.floor(Math.random() * (carta + 1)); //random cartandex
-        [mazo[carta], mazo[cartaCambio]] = [mazo[cartaCambio], mazo[carta]]; // swap
+        var cartaCambio = Math.floor(Math.random() * (carta + 1));
+        [mazo[carta], mazo[cartaCambio]] = [mazo[cartaCambio], mazo[carta]];
     }
-    // const mazoBarajado = mazo.sort(() => Math.random() - 0.5);
     setContador(getTapeteObject('inicial').contador, mazo.length);
     return mazo;
 }
@@ -330,8 +329,8 @@ function cargarTapeteInicial() {
 */
 function cargarCarta(carta, indice, total) {
     carta.style.position = "absolute";
-    carta.style.top = "" + (5 * indice) + "px";
-    carta.style.left = "" + (5 * indice) + "px";
+    carta.style.top = "" + (paso * indice) + "px";
+    carta.style.left = "" + (paso * indice) + "px";
     carta.draggable = false;
     let dragged = undefined;
     carta.addEventListener("dragstart", (event) => {
@@ -402,10 +401,4 @@ function finDelJuego() {
 
 // PUESTA EN MARCHA CUANDO EL DOCUMENTO ESTA CARGADO
 
-body = document.body;
-body.addEventListener('onload', arrancarTiempo());
-body.addEventListener('onload', comenzarJuego());
-
-botonReset.addEventListener('click', _ => {
-    location.reload();
-})
+document.body.addEventListener('onload', comenzarJuego());
