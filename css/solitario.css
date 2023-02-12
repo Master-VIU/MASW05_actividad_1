@@ -15,11 +15,6 @@
 	right: 3px;
 }
 
-#reset {
-	position: relative;	
-	left: 48%;
-	
-}
 /* Centrado del título y color */
 h1#titulo {
 	text-align: center;
@@ -67,4 +62,14 @@ div.tapete#sobrantes{
 /* Color de fondo de los tapetes receptores */
 div.tapete.receptor{
 	background-color: lightgreen;
+}
+
+.button_container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#reset {
+	width: 450px;
 }
